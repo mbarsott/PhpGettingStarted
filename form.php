@@ -115,5 +115,5 @@ if (isset($_POST['submit'])) {
     <br>
     <input type="checkbox" name="tc" value="ok" <?= $tc === 'ok' ? 'checked' : '' ?>/>
     I accept the T&ampC<br>
-    <input type="submit" name="submit" value="Search">
+    <input type="submit" name="submit" value="Register">
 </form>
