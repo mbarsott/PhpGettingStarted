@@ -1,4 +1,5 @@
 <?php
+
 $name='';
 $password='';
 $gender='';
@@ -45,22 +46,29 @@ if (isset($_POST['submit'])) {
         $tc=$_POST['tc'];
     }
     if ($ok) {
-        printf(
-            'User name: %s,
-            <br>Password: %s,
-            <br>Gender: %s,
-            <br>Color: %s,
-            <br>Language(s): %s,
-            <br>Comments: %s,
-            <br>T&amp;C: %s',
-            htmlspecialchars($name, ENT_QUOTES),
-            htmlspecialchars($password, ENT_QUOTES),
-            htmlspecialchars($gender, ENT_QUOTES),
-            htmlspecialchars($color, ENT_QUOTES),
-            htmlspecialchars(implode(' ', $languages), ENT_QUOTES),
-            htmlspecialchars($comments, ENT_QUOTES),
-            htmlspecialchars($tc, ENT_QUOTES)
+        $db = new mysqli(
+            'localhost',
+            'php_getting_started_user',
+            'php_getting_started_password',
+            'php_getting_started'
         );
+        // first approach
+        /*
+                $sql = sprintf(
+                    "INSERT INTO users (name, gender, color) VALUES (
+                        '%s', '%s', '%s')",
+                    $db->real_escape_string($name),
+                    $db->real_escape_string($gender),
+                    $db->real_escape_string($color)
+                );
+                $db->query($sql);
+        */
+        // second approach
+        $stmt = $db->prepare("INSERT INTO users (name, gender, color) VALUES (?, ?, ?)");
+        $stmt->bind_param('sss', $name, $gender, $color); // 'sss' stands for thre strings to be bound
+        $stmt->execute();
+        echo '<p>User added.</p>';
+        $db->close();
     }
 }
 ?>
